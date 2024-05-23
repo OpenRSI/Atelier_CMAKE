@@ -1,0 +1,16 @@
+name: Automatisation des tests
+on: push
+jobs:
+  Compilation:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Compilation
+        run: |
+          last_directory=$(basename ${{ runner.workspace }})
+          git clone https://github.com/${{ github.repository }}.git
+          cd ./$last_directory
+          mkdir build
+          cd build
+          cmake ..
+          make
+          make test
