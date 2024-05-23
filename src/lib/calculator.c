@@ -1,4 +1,9 @@
 #include "./../../include/calculator.h"
+#include "calculator.h"
+
+int car(int x) {
+    return x * x;
+}
 
 double _add(double a, double b) {
 	return a+b;
