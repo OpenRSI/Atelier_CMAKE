@@ -82,7 +82,7 @@ Dans cet exercice vous devez modifier votre code C afin de créer et tester une 
 L'appel de la fonction est le suivant : **src/calculator car 5** (et doit retournée la valeur 25)  
 
 **Travail demandé :**  
-Modifiez votre code afin de créer et tester cette nouvelle fonction au carré.  
+Modifiez votre code afin de créer et tester automatiquement cette nouvelle fonction au carré.  
 Indice : Les fichiers à modifier sont les suivants  
   - src/main.c
   - src/lib/calculator.c
@@ -98,7 +98,7 @@ Séquence 4 : Votre premier pipeline
 Objectif : Créer votre pipeline de jobs  
 Difficulté : Faible (~10 minutes)
 ---------------------------------------------------
-Automatiser vos tests via le fichier CMakeLists.txt c'est bien mais vous souhaiteriez peut-être avoir plus de contrôle dans l'execution de ses tests. Exemple, pouvoir paralléliser ses tests, ou poursuivre des tests même lorsqu'un test est en echec.  
+Automatiser vos tests via le fichier CMakeLists.txt c'est bien mais vous souhaiteriez peut-être avoir plus de contrôle dans l'execution de ces tests. Par exemple, pouvoir paralléliser ces tests, ou poursuivre des tests même lorsqu'un test est en echec.  
 
 Copier/Coller le code ci-dessous à la suite de votre fichier tests.yml et observez le résultats dans vos Actions Github (et dans les logs).  
 ```
