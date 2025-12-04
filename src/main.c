@@ -26,6 +26,14 @@ int main(int argc, char *argv[]){
 		r = _div(atof(a), atof(b));
 		printf("%lf",r);
 	}
+	else if (strcmp(op, "mod") == 0) {
+		r = _mod((int)atof(a), (int)atof(b));
+		printf("%d",(int)r);
+	}
+	else if (strcmp(op, "pow") == 0) {
+		r = _pow(atof(a), atof(b));
+		printf("%lf",r);
+	}
 	else {printf("Erreur de parametres");}
 	}
 	else {printf("Erreur de parametres");}

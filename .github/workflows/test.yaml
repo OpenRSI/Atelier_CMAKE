@@ -1,0 +1,189 @@
+name: Automatisation des tests
+on: push
+jobs:
+  Compilation:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Compilation
+        run: |
+          last_directory=$(basename ${{ runner.workspace }})
+          git clone https://github.com/${{ github.repository }}.git
+          cd ./$last_directory
+          mkdir build
+          cd build
+          cmake ..
+          make
+          make test
+
+  # Test_Add:
+  #   runs-on: ubuntu-latest
+  #   needs: Compilation
+  #   steps:
+  #     - name: Test fonction add
+  #       run: |
+  #         last_directory=$(basename ${{ runner.workspace }})
+  #         git clone https://github.com/${{ github.repository }}.git
+  #         cd ./$last_directory
+  #         mkdir build
+  #         cd build
+  #         cmake ..
+  #         make
+  #         ./src/calculator add 5 5
+
+  Test_Add:
+    runs-on: ubuntu-latest
+    needs: Compilation
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Build
+        run: |
+          mkdir -p build
+          cd build
+          cmake ..
+          make
+
+      - name: Run test "add" and capture report
+        run: |
+          cd build
+          set -e
+          echo "== Test add 10 5 ==" > report.txt
+          ./src/calculator add 10 5 | tee -a report.txt
+          echo "\nExit code: $?" >> report.txt
+
+      - name: Upload report as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-add-report
+          path: build/report.txt      # <-- le fichier à récupérer
+          retention-days: 14          # optionnel
+
+      - name: Job summary (facultatif mais pratique)
+        run: |
+          echo "### Résultat du test *add*" >> $GITHUB_STEP_SUMMARY
+          echo '' >> $GITHUB_STEP_SUMMARY
+          cat build/report.txt >> $GITHUB_STEP_SUMMARY
+          echo '' >> $GITHUB_STEP_SUMMARY
+
+  Test_sub:
+    runs-on: ubuntu-latest
+    needs: Compilation
+    steps:
+      - name: Test fonction sub
+        run: |
+          last_directory=$(basename ${{ runner.workspace }})
+          git clone https://github.com/${{ github.repository }}.git
+          cd ./$last_directory
+          mkdir build
+          cd build
+          cmake ..
+          make
+          ./src/calculator sub 5 5
+
+  Test_mul:
+    runs-on: ubuntu-latest
+    needs: Compilation
+    steps:
+      - name: Test fonction mul
+        run: |
+          last_directory=$(basename ${{ runner.workspace }})
+          git clone https://github.com/${{ github.repository }}.git
+          cd ./$last_directory
+          mkdir build
+          cd build
+          cmake ..
+          make
+          ./src/calculator mul 2 5
+
+  Test_div:
+    runs-on: ubuntu-latest
+    needs: Compilation
+    steps:
+      - name: Test fonction div
+        run: |
+          last_directory=$(basename ${{ runner.workspace }})
+          git clone https://github.com/${{ github.repository }}.git
+          cd ./$last_directory
+          mkdir build
+          cd build
+          cmake ..
+          make
+          ./src/calculator div 1 5
+  
+  Test_mod:
+    runs-on: ubuntu-latest
+    needs: Compilation
+    steps:
+      - name: Test fonction mod
+        run: |
+          last_directory=$(basename ${{ runner.workspace }})
+          git clone https://github.com/${{ github.repository }}.git
+          cd ./$last_directory
+          mkdir build
+          cd build
+          cmake ..
+          make
+          ./src/calculator mod 5 2
+    
+  # Test_pow:
+  #   runs-on: ubuntu-latest
+  #   needs: Compilation
+  #   steps:
+  #     - name: Test fonction pow
+  #       run: |
+  #         last_directory=$(basename ${{ runner.workspace }})
+  #         git clone https://github.com/${{ github.repository }}.git
+  #         cd ./$last_directory
+  #         mkdir build
+  #         cd build
+  #         cmake ..
+  #         make
+  #         ./src/calculator pow 5 2
+
+  Test_Pow:
+    runs-on: ubuntu-latest
+    needs: Compilation
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Build
+        run: |
+          mkdir -p build
+          cd build
+          cmake ..
+          make
+
+      - name: Run test "pow" and capture report
+        run: |
+          cd build
+          set -e
+          echo "== Test pow 5 2 ==" > pow_report.txt
+          ./src/calculator pow 5 2 | tee -a pow_report.txt
+          echo "\nExit code: $?" >> pow_report.txt
+
+      - name: Upload report as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-pow-report
+          path: build/pow_report.txt      # <-- le fichier à récupérer
+          retention-days: 14          # optionnel
+
+      - name: Job summary (facultatif mais pratique)
+        run: |
+          echo "\n### Résultat du test *pow*" >> $GITHUB_STEP_SUMMARY
+          echo '' >> $GITHUB_STEP_SUMMARY
+          cat build/pow_report.txt >> $GITHUB_STEP_SUMMARY
+          echo '' >> $GITHUB_STEP_SUMMARY
+  
+  Deployment:
+    runs-on: ubuntu-latest
+    needs: [Test_Add, Test_sub, Test_mul, Test_div, Test_mod, Test_pow]
+    steps:
+      - name: Compilation
+        run: |
+          last_directory=$(basename ${{ runner.workspace }})
+          git clone https://github.com/${{ github.repository }}.git
+          cd ./$last_directory
+          echo "Déploiement de la solution..."
