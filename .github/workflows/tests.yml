@@ -18,16 +18,38 @@ jobs:
     runs-on: ubuntu-latest
     needs: Compilation
     steps:
-      - name: Test fonction add
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Build
         run: |
-          last_directory=$(basename ${{ runner.workspace }})
-          git clone https://github.com/${{ github.repository }}.git
-          cd ./$last_directory
-          mkdir build
+          mkdir -p build
           cd build
           cmake ..
           make
-          ./src/calculator add 10 5
+
+      - name: Run test "add" and capture report
+        run: |
+          cd build
+          set -e
+          echo "== Test add 10 5 ==" > report.txt
+          ./src/calculator add 10 5 | tee -a report.txt
+          echo "Exit code: $?" >> report.txt
+
+      - name: Upload report as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-add-report
+          path: build/report.txt
+          retention-days: 14
+
+      - name: Job summary (facultatif mais pratique)
+        run: |
+          echo "### Résultat du test *add*" >> $GITHUB_STEP_SUMMARY
+          echo '' >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY
+          cat build/report.txt >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY
   Test_Sub:
     runs-on: ubuntu-latest
     needs: Compilation
