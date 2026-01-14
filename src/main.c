@@ -23,7 +23,7 @@ int main(int argc, char *argv[]){
 		printf("%lf",r);
 	}
 	else if (strcmp(op, "div") == 0) {
-		r = _div(atof(a), atof(b));
+		r = _div(atof(a));
 		printf("%lf",r);
 	}
 	else if (strcmp(op, "car") ==0) {
