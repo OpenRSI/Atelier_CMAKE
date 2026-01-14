@@ -56,7 +56,7 @@ jobs:
           cmake ..
           make
           ./src/calculator mul 10 5
-    Test_Div:
+  Test_Div:
     runs-on: ubuntu-latest
     needs: Compilation
     steps:
