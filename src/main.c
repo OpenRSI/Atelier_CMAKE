@@ -28,7 +28,7 @@ int main(int argc, char *argv[]){
 	}
 	else if (strcmp(op, "car") ==0) {
 		r = _car(atof(a));
-		printf("%lf,r);
+		printf("%lf",r);
 	}
 	else {printf("Erreur de parametres");}
 	}
